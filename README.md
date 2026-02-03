@@ -1,6 +1,15 @@
 # Col-Cal
 
-Is a lightweight, HTML-friendly web component calendar
+A lightweight, HTML-friendly web component calendar.
+
+## Bundle Size
+
+| Metric | Size |
+|--------|------|
+| Minified | 54.95 KB |
+| Gzipped | **14.17 KB** |
+
+*Lit is bundled with the component.*
 
 ## Installation
 
@@ -26,8 +35,7 @@ npx vite build
 
 ## Dependencies
 
-- **Lit**: A lightweight library for building web components.
-- **Date-Fns**: A modern JavaScript date utility library that provides a comprehensive set of functions for manipulating and formatting dates.
+- **Lit** (bundled): A lightweight library for building web components (~5 KB gzipped).
 
 ## Development
 

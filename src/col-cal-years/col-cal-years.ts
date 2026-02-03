@@ -1,21 +1,24 @@
 import { LitElement } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
 import { colCalYearsStyles } from "./col-cal-years.css";
 import { renderColCalYears } from "./col-cal-years.html";
 
-@customElement("col-cal-years")
 export class ColCalYears extends LitElement {
   static styles = colCalYearsStyles;
 
-  @property({ type: Number }) selectedYear: number | null = null;
+  static properties = {
+    selectedYear: { type: Number },
+    minYear: { type: Number },
+    maxYear: { type: Number },
+    disabledYears: { type: Array },
+    dataTestid: { type: String },
+    _startYear: { state: true },
+  };
 
-  @property({ type: Object }) minYear: number | null = null;
-  @property({ type: Object }) maxYear: number | null = null;
-
-  @property({ type: Array }) disabledYears: number[] = [];
-  @property({ type: String }) dataTestid: string = "ColCal-Years";
-
-  @state()
+  selectedYear: number | null = null;
+  minYear: number | null = null;
+  maxYear: number | null = null;
+  disabledYears: number[] = [];
+  dataTestid: string = "ColCal-Years";
   private _startYear: number = 2005;
   private _chunkSize = 12;
 
@@ -84,6 +87,8 @@ export class ColCalYears extends LitElement {
     });
   }
 }
+
+customElements.define("col-cal-years", ColCalYears);
 
 declare global {
   interface HTMLElementTagNameMap {

@@ -1,5 +1,4 @@
 import { LitElement, html } from "lit";
-import { customElement, property, state, query } from "lit/decorators.js";
 import { colCalPopoverStyles } from "./col-cal-popover.css";
 
 /**
@@ -39,26 +38,30 @@ export function supportsPopoverAPI(): boolean {
  * </col-cal-popover>
  * ```
  */
-@customElement("col-cal-popover")
 export class ColCalPopover extends LitElement {
   static styles = colCalPopoverStyles;
+
+  static properties = {
+    for: { type: String },
+    dataTestid: { type: String },
+    _open: { state: true },
+  };
 
   /**
    * The ID of the anchor element that triggers this popover.
    * The popover will be positioned relative to this element.
    */
-  @property({ type: String }) for: string = "";
+  for: string = "";
 
   /**
    * Data-testid attribute for testing purposes.
    */
-  @property({ type: String }) dataTestid: string = "ColCal-Popover";
+  dataTestid: string = "ColCal-Popover";
 
   /**
    * Internal state tracking whether the popover is open.
    * Used for fallback mode when native popover is not supported.
    */
-  @state()
   private _open: boolean = false;
 
   /**
@@ -79,8 +82,9 @@ export class ColCalPopover extends LitElement {
   /**
    * Reference to the popover container element.
    */
-  @query(".popover-container")
-  private _popoverElement!: HTMLElement;
+  private get _popoverElement(): HTMLElement | null {
+    return this.renderRoot?.querySelector(".popover-container") ?? null;
+  }
 
   connectedCallback(): void {
     super.connectedCallback();
@@ -113,10 +117,11 @@ export class ColCalPopover extends LitElement {
             // Note: Since we're using Shadow DOM, we need to wait for the
             // popover element to be rendered before setting up the target
             this.updateComplete.then(() => {
-              if (this._popoverElement && this._anchorElement) {
+              const popoverEl = this._popoverElement;
+              if (popoverEl && this._anchorElement) {
                 // Generate a unique ID for the popover element if needed
                 const popoverId = `popover-${this.for}`;
-                this._popoverElement.id = popoverId;
+                popoverEl.id = popoverId;
                 // Set popovertarget on the anchor element
                 this._anchorElement.setAttribute("popovertarget", popoverId);
                 this._anchorElement.setAttribute("popovertargetaction", "toggle");
@@ -157,9 +162,10 @@ export class ColCalPopover extends LitElement {
    * Uses native showPopover() API when available, falls back to state toggle.
    */
   public show(): void {
-    if (this._supportsNativePopover && this._popoverElement) {
+    const popoverEl = this._popoverElement;
+    if (this._supportsNativePopover && popoverEl) {
       try {
-        this._popoverElement.showPopover();
+        popoverEl.showPopover();
       } catch {
         // Popover might already be open, ignore error
       }
@@ -173,9 +179,10 @@ export class ColCalPopover extends LitElement {
    * Uses native hidePopover() API when available, falls back to state toggle.
    */
   public hide(): void {
-    if (this._supportsNativePopover && this._popoverElement) {
+    const popoverEl = this._popoverElement;
+    if (this._supportsNativePopover && popoverEl) {
       try {
-        this._popoverElement.hidePopover();
+        popoverEl.hidePopover();
       } catch {
         // Popover might already be hidden, ignore error
       }
@@ -261,6 +268,8 @@ export class ColCalPopover extends LitElement {
     `;
   }
 }
+
+customElements.define("col-cal-popover", ColCalPopover);
 
 declare global {
   interface HTMLElementTagNameMap {

@@ -1,23 +1,29 @@
 import { LitElement } from "lit";
-import { customElement, property } from "lit/decorators.js";
 import type { MonthNumber } from "../col-cal.type";
 import { getMonths, isAfter, isBefore } from "../date.utils";
 import { colCalMonthsStyles } from "./col-cal-months.css";
 import { renderColCalMonths } from "./col-cal-months.html";
 
-@customElement("col-cal-months")
 export class ColCalMonths extends LitElement {
   static styles = colCalMonthsStyles;
 
-  @property({ type: Number }) selectedMonth: MonthNumber | null = null;
-  @property({ type: Array }) disabledMonths: MonthNumber[] | null = null;
-  @property({ type: Number }) year: number = new Date().getFullYear();
+  static properties = {
+    selectedMonth: { type: Number },
+    disabledMonths: { type: Array },
+    year: { type: Number },
+    minMonth: { type: Object },
+    maxMonth: { type: Object },
+    locale: { type: String },
+    dataTestid: { type: String },
+  };
 
-  @property({ type: Object }) minMonth: Date | null = null;
-  @property({ type: Object }) maxMonth: Date | null = null;
-
-  @property({ type: String }) locale: string = "en-US";
-  @property({ type: String }) dataTestid: string = "ColCal-Months";
+  selectedMonth: MonthNumber | null = null;
+  disabledMonths: MonthNumber[] | null = null;
+  year: number = new Date().getFullYear();
+  minMonth: Date | null = null;
+  maxMonth: Date | null = null;
+  locale: string = "en-US";
+  dataTestid: string = "ColCal-Months";
 
   private getFromIndexMonth(month: string): MonthNumber {
     return getMonths(this.locale).indexOf(month) as MonthNumber;
@@ -68,6 +74,8 @@ export class ColCalMonths extends LitElement {
     });
   }
 }
+
+customElements.define("col-cal-months", ColCalMonths);
 
 declare global {
   interface HTMLElementTagNameMap {

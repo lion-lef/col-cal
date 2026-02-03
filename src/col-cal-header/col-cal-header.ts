@@ -1,21 +1,25 @@
 import { LitElement } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
 import { addMonths, isAfter, isBefore, subMonths } from "../date.utils";
 import { colCalHeaderStyles } from "./col-cal-header.css";
 import { renderColCalHeader } from "./col-cal-header.html";
 
-@customElement("col-cal-header")
 export class ColCalHeader extends LitElement {
   static styles = colCalHeaderStyles;
 
-  @property({ type: String }) locale: string = "en-US";
-  @property({ type: String }) dataTestid: string = "ColCal-Header";
-  @property({ type: Object }) date: Date | null = null;
+  static properties = {
+    locale: { type: String },
+    dataTestid: { type: String },
+    date: { type: Object },
+    minDate: { type: Object },
+    maxDate: { type: Object },
+    _date: { state: true },
+  };
 
-  @property({ type: Object }) minDate: Date | null = null;
-  @property({ type: Object }) maxDate: Date | null = null;
-
-  @state()
+  locale: string = "en-US";
+  dataTestid: string = "ColCal-Header";
+  date: Date | null = null;
+  minDate: Date | null = null;
+  maxDate: Date | null = null;
   private _date: Date = this.date ?? new Date();
 
   handleChangeMonth() {
@@ -85,3 +89,5 @@ export class ColCalHeader extends LitElement {
     );
   }
 }
+
+customElements.define("col-cal-header", ColCalHeader);

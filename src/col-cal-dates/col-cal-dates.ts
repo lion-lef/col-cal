@@ -1,5 +1,4 @@
 import { LitElement, html } from "lit";
-import { property, customElement } from "lit/decorators.js";
 import {
   startOfMonth,
   endOfMonth,
@@ -16,27 +15,29 @@ import { renderColCalDates } from "./col-cal-dates.html";
 
 type Day = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
-@customElement("col-cal-dates")
 export class ColCalDates extends LitElement {
   static styles = colCalDatesStyles;
 
-  @property({ type: Date })
+  static properties = {
+    month: { type: Object },
+    minDate: { type: Object },
+    maxDate: { type: Object },
+    selectedDate: { type: Object },
+    dataTestid: { type: String },
+    locale: { type: String },
+    firstDayOfWeek: { type: Number },
+    disabledDates: { type: Array },
+    events: { type: Array },
+  };
+
   month: Date | null = null;
-
-  @property({ type: Date })
   minDate: Date | null = null;
-
-  @property({ type: Date })
   maxDate: Date | null = null;
-
-  @property({ type: Date })
   selectedDate: Date | null = null;
-
-  @property({ type: String }) dataTestid: string = "Dates";
-  @property({ type: String }) locale: string = "en-US";
-  @property({ type: Number }) firstDayOfWeek: Day = 1;
-  @property({ type: Array }) disabledDates: Date[] = [];
-  @property({ type: Array })
+  dataTestid: string = "Dates";
+  locale: string = "en-US";
+  firstDayOfWeek: Day = 1;
+  disabledDates: Date[] = [];
   events: Array<{ date: Date; title: string }> = [];
 
   private getPrevMonthDays(month: Date): Date[] {
@@ -138,8 +139,10 @@ export class ColCalDates extends LitElement {
   }
 }
 
+customElements.define("col-cal-dates", ColCalDates);
+
 declare global {
   interface HTMLElementTagNameMap {
-    "col-cal-date": ColCalDates;
+    "col-cal-dates": ColCalDates;
   }
 }

@@ -1,5 +1,4 @@
 import { LitElement, html } from "lit";
-import { property, state, customElement } from "lit/decorators.js";
 import "../col-cal-header/col-cal-header";
 import "../col-cal-dates/col-cal-dates";
 import "../col-cal-months/col-cal-months";
@@ -12,19 +11,28 @@ import type { ColCalPopover } from "../col-cal-popover/col-cal-popover";
 import { insertSlotsByName } from "../lightdom.utils";
 import { colCalStyles } from "./col-cal.css";
 
-@customElement("col-cal")
 export class ColCal extends LitElement {
-  @property({ type: Object }) date: Date = new Date();
-  @property({ type: Object }) minDate: Date | null = null;
-  @property({ type: Object }) maxDate: Date | null = null;
+  static properties = {
+    date: { type: Object },
+    minDate: { type: Object },
+    maxDate: { type: Object },
+    locale: { type: String },
+    dataTestid: { type: String },
+    firstDayOfWeek: { type: Number },
+    disabledDates: { type: Array },
+    events: { type: Array },
+    _date: { state: true },
+  };
 
-  @property({ type: String }) locale: string = "en-US";
-  @property({ type: String }) dataTestid: string = "ColCal";
-  @property({ type: Number }) firstDayOfWeek: number = 1;
-  @property({ type: Array }) disabledDates: Date[] = [];
-  @property({ type: Array }) events: Array<{ date: Date; title: string }> = [];
+  date: Date = new Date();
+  minDate: Date | null = null;
+  maxDate: Date | null = null;
+  locale: string = "en-US";
+  dataTestid: string = "ColCal";
+  firstDayOfWeek: number = 1;
+  disabledDates: Date[] = [];
+  events: Array<{ date: Date; title: string }> = [];
 
-  @state()
   private _date: Date = this.date;
   private _monthsButtonId: string = "open-months-popup";
   private _yearsButtonId: string = "open-years-popup";
@@ -265,6 +273,8 @@ export class ColCal extends LitElement {
     `;
   }
 }
+
+customElements.define("col-cal", ColCal);
 
 declare global {
   interface HTMLElementTagNameMap {
